@@ -11,6 +11,6 @@ public record Person(String name, Integer age) {
   }
 
   public String toPrettyString() {
-    return "$name, age $age".replace("$name", this.name).replace("$age", String.valueOf(this.age));
+    return String.format("%s, age %d", name, age);
   }
 }
