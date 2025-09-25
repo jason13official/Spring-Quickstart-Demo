@@ -1,5 +1,6 @@
 package io.github.jason13official.quickstart_demo;
 
+import io.github.jason13official.quickstart_demo.impl.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class QuickstartDemoApplication {
+
+	// so we don't create a new record every request
+	private static final Person JASON = new Person("Jason", 25);
 
 	public static void main(String[] args) {
 
@@ -32,4 +36,12 @@ public class QuickstartDemoApplication {
 		return String.format("Hello %s!", name);
 	}
 
+	@GetMapping("/person")
+	public String person() {
+		return asH1(JASON.toPrettyString());
+	}
+
+	private static String asH1(String s) {
+		return "<h1>" + s + "</h1>";
+	}
 }
