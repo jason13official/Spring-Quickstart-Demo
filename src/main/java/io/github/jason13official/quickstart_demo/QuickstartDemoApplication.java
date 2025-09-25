@@ -36,9 +36,20 @@ public class QuickstartDemoApplication {
 		return String.format("Hello %s!", name);
 	}
 
-	@GetMapping("/person")
-	public String person() {
+	/**
+	 * Returning a hard-coded String representation of a Person object
+	 */
+	@GetMapping("/person/manualSerialization")
+	public String personManual() {
 		return asH1(JASON.toPrettyString());
+	}
+
+	/**
+	 * Returning a new Person object created from passed values (without {@link RequestParam})
+	 */
+	@GetMapping("/person")
+	public Person person(String name, Integer age) {
+		return new Person(name, age);
 	}
 
 	private static String asH1(String s) {
