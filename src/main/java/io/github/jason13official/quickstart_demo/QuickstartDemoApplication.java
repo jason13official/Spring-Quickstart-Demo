@@ -1,6 +1,13 @@
 package io.github.jason13official.quickstart_demo;
 
+import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
+import io.github.jason13official.quickstart_demo.impl.Student;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class QuickstartDemoApplication {
+
+  public static Student[] studentsForDemo = new Student[]{
+      new Student(new Person("Jason", 25), false, new Car("Ford", "Ranger")),
+      new Student(new Person("David", 27), true, new Car("Ford", "Maverick")),
+      new Student(new Person("Barry", 29), true, new Car("Ford", "Bronco"))
+  };
 
   // so we don't create a new record every request
   private static final Person JASON = new Person("Jason", 25);
@@ -52,5 +65,29 @@ public class QuickstartDemoApplication {
   @GetMapping("/person")
   public Person person(String name, Integer age) {
     return new Person(name, age);
+  }
+
+  /** Returns a new Student object created from passed values (some of which are primitives) */
+  @GetMapping("/student")
+  public Student student(String name, int age, boolean undergraduate, String carMake, String carModel) {
+    return new Student(new Person(name, age), undergraduate, new Car(carMake, carModel));
+  }
+
+  /** Returns an Array representation of studentsForDemo */
+  @GetMapping("/student/array")
+  public Student[] studentArray() {
+    return studentsForDemo;
+  }
+
+  /** Returns a List representation of studentsForDemo */
+  @GetMapping("/student/list")
+  public List<Student> studentList() {
+    return List.of(studentsForDemo);
+  }
+
+  /** Returns a Set representation of studentsForDemo */
+  @GetMapping("/student/set")
+  public Set<Student> studentSet() {
+    return Set.of(studentsForDemo);
   }
 }
