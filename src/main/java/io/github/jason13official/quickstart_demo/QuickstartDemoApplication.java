@@ -101,7 +101,7 @@ public class QuickstartDemoApplication {
   }
 
   @PostMapping("/status/simple")
-  public Status postSimpleState(@RequestParam(value = "index") Integer index) {
+  public Status postSimpleState(@RequestParam(value = "index", defaultValue = "") Integer index) {
 
     // cycle if no index provided or invalid, else set to index
     if (index == null || (index < 0) || (index > Status.values().length - 1)) {
