@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -111,5 +112,20 @@ public class QuickstartDemoApplication {
     }
 
     return PLAYER_STATUS;
+  }
+  
+  private String detailedStatus = "No Detailed Status Set";
+
+  @GetMapping("status/detailed")
+  public String getDetailedStatus() {
+    return this.detailedStatus;
+  }
+
+  @PostMapping("status/detailed")
+  public String postDetailedStatus(@RequestBody String detailedStatus) {
+
+    this.detailedStatus = detailedStatus;
+
+    return this.detailedStatus;
   }
 }
