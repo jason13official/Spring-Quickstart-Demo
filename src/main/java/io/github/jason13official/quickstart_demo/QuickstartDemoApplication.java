@@ -121,7 +121,7 @@ public class QuickstartDemoApplication {
     return this.detailedStatus;
   }
 
-  @PostMapping("status/detailed")
+  @PostMapping(path = "status/detailed", consumes ="text/plain")
   public String postDetailedStatus(@RequestBody String detailedStatus) {
 
     this.detailedStatus = detailedStatus;
