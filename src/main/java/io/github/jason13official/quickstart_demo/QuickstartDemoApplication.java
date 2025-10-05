@@ -4,9 +4,6 @@ import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
 import io.github.jason13official.quickstart_demo.impl.Status;
 import io.github.jason13official.quickstart_demo.impl.Student;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.boot.SpringApplication;
@@ -96,32 +93,27 @@ public class QuickstartDemoApplication {
     return Set.of(studentsForDemo);
   }
 
-  @GetMapping("status/simple")
+  @GetMapping("/status/simple")
   public Status getSimpleStatus() {
     return PLAYER_STATUS;
   }
 
   @PostMapping("/status/simple")
-  public Status postSimpleState(@RequestParam(value = "index", defaultValue = "") Integer index) {
+  public Status postSimpleStatus(final Status proposedStatus) {
 
-    // cycle if no index provided or invalid, else set to index
-    if (index == null || (index < 0) || (index > Status.values().length - 1)) {
-      PLAYER_STATUS = Status.values()[(PLAYER_STATUS.ordinal() + 1) % Status.values().length];
-    } else {
-      PLAYER_STATUS = Status.values()[index];
-    }
+    PLAYER_STATUS = proposedStatus;
 
     return PLAYER_STATUS;
   }
   
   private String detailedStatus = "No Detailed Status Set";
 
-  @GetMapping("status/detailed")
+  @GetMapping("/status/detailed")
   public String getDetailedStatus() {
     return this.detailedStatus;
   }
 
-  @PostMapping(path = "status/detailed", consumes ="text/plain")
+  @PostMapping(path = "/status/detailed", consumes ="text/plain")
   public String postDetailedStatus(@RequestBody String detailedStatus) {
 
     this.detailedStatus = detailedStatus;
