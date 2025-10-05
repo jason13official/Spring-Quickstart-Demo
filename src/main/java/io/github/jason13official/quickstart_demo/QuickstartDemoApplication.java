@@ -2,15 +2,15 @@ package io.github.jason13official.quickstart_demo;
 
 import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
+import io.github.jason13official.quickstart_demo.impl.Status;
 import io.github.jason13official.quickstart_demo.impl.Student;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +30,8 @@ public class QuickstartDemoApplication {
 
   // so we don't create a new record every request
   private static final Person JASON = new Person("Jason", 25);
+
+  private static Status PLAYER_STATUS = Status.RESPAWNING;
 
   public static void main(String[] args) {
 
@@ -89,5 +91,33 @@ public class QuickstartDemoApplication {
   @GetMapping("/student/set")
   public Set<Student> studentSet() {
     return Set.of(studentsForDemo);
+  }
+
+  @GetMapping("/status/simple")
+  public Status getSimpleStatus() {
+    return PLAYER_STATUS;
+  }
+
+  @PostMapping("/status/simple")
+  public Status postSimpleStatus(final Status proposedStatus) {
+
+    PLAYER_STATUS = proposedStatus;
+
+    return PLAYER_STATUS;
+  }
+  
+  private String detailedStatus = "No Detailed Status Set";
+
+  @GetMapping("/status/detailed")
+  public String getDetailedStatus() {
+    return this.detailedStatus;
+  }
+
+  @PostMapping(path = "/status/detailed", consumes ="text/plain")
+  public String postDetailedStatus(@RequestBody String detailedStatus) {
+
+    this.detailedStatus = detailedStatus;
+
+    return this.detailedStatus;
   }
 }
