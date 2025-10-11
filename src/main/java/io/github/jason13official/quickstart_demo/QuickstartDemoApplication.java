@@ -4,8 +4,11 @@ import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
 import io.github.jason13official.quickstart_demo.impl.Status;
 import io.github.jason13official.quickstart_demo.impl.Student;
+import io.github.jason13official.quickstart_demo.impl.data.User;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +34,11 @@ public class QuickstartDemoApplication {
   // so we don't create a new record every request
   private static final Person JASON = new Person("Jason", 25);
 
+  /**
+   * Used for <a href="https://github.com/jason13official/Spring-Quickstart-Demo/issues/8">Issue #8: Intro to Deserialization</a> and {@code #DESERIALIZATION} section
+   */
+  private static User USER_ABSTRACT = new User(UUID.randomUUID(), "Jason13", System.currentTimeMillis(), false, new LinkedList<>());
+
   private static Status PLAYER_STATUS = Status.RESPAWNING;
 
   public static void main(String[] args) {
@@ -38,6 +46,21 @@ public class QuickstartDemoApplication {
     // runs the specified source using default settings; DI of default values to create new object
     SpringApplication.run(QuickstartDemoApplication.class, args);
   }
+
+  // #DESERIALIZATION START
+
+  @GetMapping("/user")
+  public User getUserAbstract() {
+    return USER_ABSTRACT;
+  }
+
+  @PostMapping("/user")
+  public User postUserAbstract(User proposedUser) {
+    USER_ABSTRACT = proposedUser;
+    return USER_ABSTRACT;
+  }
+
+  // #DESERIALIZATION END
 
   private static String asH1(String s) {
     return "<h1>" + s + "</h1>";
@@ -105,7 +128,7 @@ public class QuickstartDemoApplication {
 
     return PLAYER_STATUS;
   }
-  
+
   private String detailedStatus = "No Detailed Status Set";
 
   @GetMapping("/status/detailed")
