@@ -4,6 +4,7 @@ import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
 import io.github.jason13official.quickstart_demo.impl.Status;
 import io.github.jason13official.quickstart_demo.impl.Student;
+import io.github.jason13official.quickstart_demo.impl.data.Comment;
 import io.github.jason13official.quickstart_demo.impl.data.User;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,9 +36,23 @@ public class QuickstartDemoApplication {
   private static final Person JASON = new Person("Jason", 25);
 
   /**
+   * Used for <a href="https://github.com/jason13official/Spring-Quickstart-Demo/issues/8">Issue #8: Intro to Deserialization</a> and {@code USER_ABSTRACT} field
+   * <br />
+   * This is just the initially assigned list, it may be dereferenced/unused once a postUser request is fulfilled.
+   */
+  private static LinkedList<Comment> COMMENTS = new LinkedList<>();
+
+  static {
+    COMMENTS.add(new Comment(UUID.randomUUID(), "Comments on comments"));
+    COMMENTS.add(new Comment(UUID.randomUUID(), "Just another comment, yabba dabba doooooo"));
+    COMMENTS.add(new Comment(UUID.randomUUID(), "Yet another comment, yabba dabba doooooo"));
+    COMMENTS.add(new Comment(UUID.randomUUID(), "Some other comment, yabba dabba doooooo"));
+  }
+
+  /**
    * Used for <a href="https://github.com/jason13official/Spring-Quickstart-Demo/issues/8">Issue #8: Intro to Deserialization</a> and {@code #DESERIALIZATION} section
    */
-  private static User USER_ABSTRACT = new User(UUID.randomUUID(), "Jason13", System.currentTimeMillis(), false, new LinkedList<>());
+  private static User USER_ABSTRACT = new User(UUID.randomUUID(), "Jason13", System.currentTimeMillis(), false, COMMENTS);
 
   private static Status PLAYER_STATUS = Status.RESPAWNING;
 
