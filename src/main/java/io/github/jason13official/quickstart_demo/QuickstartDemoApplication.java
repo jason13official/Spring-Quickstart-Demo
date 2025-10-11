@@ -70,7 +70,7 @@ public class QuickstartDemoApplication {
   }
 
   @PostMapping("/user")
-  public User postUserAbstract(User proposedUser) {
+  public User postUserAbstract(@RequestBody User proposedUser) {
     USER_ABSTRACT = proposedUser;
     return USER_ABSTRACT;
   }
