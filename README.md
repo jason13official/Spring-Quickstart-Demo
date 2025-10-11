@@ -23,3 +23,5 @@ different endpoints.
 Examples:
 - `curl --request GET "http://localhost:8080/status/detailed`
 - `curl --request POST --data "My New Detailed Status" "http://localhost:8080/status/detailed`
+
+test
