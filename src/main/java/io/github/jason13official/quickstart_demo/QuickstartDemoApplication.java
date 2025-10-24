@@ -6,6 +6,8 @@ import io.github.jason13official.quickstart_demo.impl.Status;
 import io.github.jason13official.quickstart_demo.impl.Student;
 import io.github.jason13official.quickstart_demo.impl.data.Comment;
 import io.github.jason13official.quickstart_demo.impl.data.User;
+import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeBoard;
+import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeCell;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class QuickstartDemoApplication {
+
+  public static TicTacToeBoard GAME_BOARD = new TicTacToeBoard(new TicTacToeCell[3][3]);
 
   public static Student[] studentsForDemo = new Student[]{
       new Student(new Person("Jason", 25), false, new Car("Ford", "Ranger")),
@@ -61,6 +65,21 @@ public class QuickstartDemoApplication {
     // runs the specified source using default settings; DI of default values to create new object
     SpringApplication.run(QuickstartDemoApplication.class, args);
   }
+
+  // #TICTACTOE START
+
+  @GetMapping("/tictactoe")
+  public TicTacToeBoard getTicTacToeBoard() {
+    return GAME_BOARD;
+  }
+
+  @PostMapping("/tictactoe")
+  public TicTacToeBoard postGameAction(@RequestBody TicTacToeBoard newBoard) {
+    GAME_BOARD = newBoard;
+    return GAME_BOARD;
+  }
+
+  // #TICTACTOE END
 
   // #DESERIALIZATION START
 
