@@ -74,7 +74,7 @@ public class QuickstartDemoApplication {
   }
 
   @PostMapping("/tictactoe")
-  public TicTacToeBoard postGameAction(@RequestBody TicTacToeBoard newBoard) {
+  public TicTacToeBoard postGameAction(@RequestBody(required = false) TicTacToeBoard newBoard) {
     GAME_BOARD = newBoard;
     return GAME_BOARD;
   }
