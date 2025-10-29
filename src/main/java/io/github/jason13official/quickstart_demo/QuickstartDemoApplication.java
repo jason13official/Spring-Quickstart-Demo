@@ -10,6 +10,7 @@ import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeBoard;
 import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeCell;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.boot.SpringApplication;
@@ -74,8 +75,8 @@ public class QuickstartDemoApplication {
   }
 
   @PostMapping("/tictactoe")
-  public TicTacToeBoard postGameAction(@RequestBody(required = false) TicTacToeBoard newBoard) {
-    GAME_BOARD = newBoard;
+  public TicTacToeBoard postGameAction(@RequestBody Optional<TicTacToeBoard> newBoard) {
+    newBoard.ifPresent(ticTacToeBoard -> GAME_BOARD = ticTacToeBoard);
     return GAME_BOARD;
   }
 
