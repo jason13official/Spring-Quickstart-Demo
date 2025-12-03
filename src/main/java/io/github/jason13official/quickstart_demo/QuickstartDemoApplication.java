@@ -1,5 +1,7 @@
 package io.github.jason13official.quickstart_demo;
 
+import io.github.jason13official.quickstart_demo.high_score_demo.data.Level;
+import io.github.jason13official.quickstart_demo.high_score_demo.data.score.v1.HighScore;
 import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
 import io.github.jason13official.quickstart_demo.impl.Status;
@@ -8,8 +10,10 @@ import io.github.jason13official.quickstart_demo.impl.data.Comment;
 import io.github.jason13official.quickstart_demo.impl.data.User;
 import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeBoard;
 import io.github.jason13official.quickstart_demo.impl.data.game.TicTacToeCell;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +31,15 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class QuickstartDemoApplication {
+
+  /// used for high_score_demo package
+  public static Map<Level, HighScore> HIGH_SCORES = new HashMap<>();
+
+  static {
+    HIGH_SCORES.put(Level.SLIME_WORLD, new HighScore("OriginalPlayerOne", 2000));
+    HIGH_SCORES.put(Level.OVERWORLD, new HighScore("OriginalPlayerOne", 45000));
+    HIGH_SCORES.put(Level.SKY_WORLD, new HighScore("OriginalPlayerOne", 400));
+  }
 
   public static TicTacToeBoard GAME_BOARD = new TicTacToeBoard(new TicTacToeCell[3][3]);
 
@@ -65,6 +78,41 @@ public class QuickstartDemoApplication {
     // runs the specified source using default settings; DI of default values to create new object
     SpringApplication.run(QuickstartDemoApplication.class, args);
   }
+
+  // #HIGH_SCORE_DEMO START
+
+  /// `curl --request GET --output "highscores.json" "http://localhost:8080/highscores"`
+  @GetMapping("/highscores")
+  public Map<Level, HighScore> getHighScores() {
+    return HIGH_SCORES;
+  }
+
+  public record ScoreUpdate(Level level, HighScore highScore) {}
+
+  /// `curl --request POST --json @score_update.json "http://localhost:8080/highscores"`
+  @PostMapping("/highscores")
+  public Map<Level, HighScore> setHighScore(@RequestBody(required = false) ScoreUpdate scoreUpdate) {
+    HIGH_SCORES.put(scoreUpdate.level, scoreUpdate.highScore);
+    return HIGH_SCORES;
+  }
+
+  // alternative get mappings for testing endpoint data
+//  @GetMapping("/highscores/levels")
+//  public Level[] getLevels() {
+//    return Level.values();
+//  }
+//
+//  @GetMapping("/highscores/singular")
+//  public HighScore getSingular() {
+//    return HIGH_SCORES.get(Level.SLIME_WORLD);
+//  }
+//
+//  @GetMapping("/highscores/scoreUpdate")
+//  public ScoreUpdate getScoreUpdate() {
+//    return new ScoreUpdate(Level.SLIME_WORLD, new HighScore("Jackson", 333));
+//  }
+
+  // #HIGH_SCORE_DEMO END
 
   // #TICTACTOE START
 
