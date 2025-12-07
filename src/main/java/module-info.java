@@ -1,0 +1,2 @@
+module SpringQuickstartDemo {
+}
