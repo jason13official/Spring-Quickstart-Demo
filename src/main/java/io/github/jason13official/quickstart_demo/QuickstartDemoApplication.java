@@ -1,7 +1,9 @@
 package io.github.jason13official.quickstart_demo;
 
 import io.github.jason13official.quickstart_demo.high_score_demo.data.Level;
+import io.github.jason13official.quickstart_demo.high_score_demo.data.score.AbstractHighScore;
 import io.github.jason13official.quickstart_demo.high_score_demo.data.score.v1.HighScore;
+import io.github.jason13official.quickstart_demo.high_score_demo.data.score.v2.HighScoreV2;
 import io.github.jason13official.quickstart_demo.impl.Car;
 import io.github.jason13official.quickstart_demo.impl.Person;
 import io.github.jason13official.quickstart_demo.impl.Status;
@@ -24,12 +26,12 @@ import module spring.web;
 public class QuickstartDemoApplication {
 
   /// used for high_score_demo package
-  public static Map<Level, HighScore> HIGH_SCORES = new HashMap<>();
+  public static Map<Level, HighScoreV2> HIGH_SCORES = new HashMap<>();
 
   static {
-    HIGH_SCORES.put(Level.SLIME_WORLD, new HighScore("OriginalPlayerOne", 2000));
-    HIGH_SCORES.put(Level.OVERWORLD, new HighScore("OriginalPlayerOne", 45000));
-    HIGH_SCORES.put(Level.SKY_WORLD, new HighScore("OriginalPlayerOne", 400));
+    HIGH_SCORES.put(Level.SLIME_WORLD, new HighScoreV2(new String[]{"OriginalPlayerOne", "NewPlayerTwo"}, 2000));
+    HIGH_SCORES.put(Level.OVERWORLD, new HighScoreV2(new String[]{"OriginalPlayerOne", "AlternatePlayerThree"}, 45000));
+    HIGH_SCORES.put(Level.SKY_WORLD, new HighScoreV2(new String[]{"OriginalPlayerOne", "PlayerFour"}, 400));
   }
 
   public static TicTacToeBoard GAME_BOARD = new TicTacToeBoard(new TicTacToeCell[3][3]);
@@ -74,17 +76,33 @@ public class QuickstartDemoApplication {
 
   /// `curl --request GET --output "highscores.json" "http://localhost:8080/highscores"`
   @GetMapping("/highscores")
-  public Map<Level, HighScore> getHighScores() {
+  public Map<Level, HighScoreV2> getHighScores() {
     return HIGH_SCORES;
   }
 
-  public record ScoreUpdate(Level level, HighScore highScore) {}
+  public record ScoreUpdate<T extends AbstractHighScore>(Level level, T highScore) {}
 
   /// `curl --request POST --json @score_update.json "http://localhost:8080/highscores"`
   @PostMapping("/highscores")
-  public Map<Level, HighScore> setHighScore(@RequestBody(required = false) ScoreUpdate scoreUpdate) {
-    HIGH_SCORES.put(scoreUpdate.level, scoreUpdate.highScore);
+  public Map<Level, HighScoreV2> setHighScore(@RequestBody(required = false) ScoreUpdate<AbstractHighScore> scoreUpdate) {
+
+    HighScoreV2 finalized;
+
+    switch (scoreUpdate.highScore) {
+      case HighScore highScore -> {
+        finalized = translateV1V2(highScore);
+      }
+      case HighScoreV2 highScoreV2 -> {
+        finalized = highScoreV2;
+      }
+    }
+
+    HIGH_SCORES.put(scoreUpdate.level, finalized);
     return HIGH_SCORES;
+  }
+
+  private static HighScoreV2 translateV1V2(HighScore highScore) {
+    return new HighScoreV2(new String[]{highScore.getUsername()}, highScore.getScore());
   }
 
   // alternative get mappings for testing endpoint data
@@ -98,10 +116,10 @@ public class QuickstartDemoApplication {
 //    return HIGH_SCORES.get(Level.SLIME_WORLD);
 //  }
 //
-//  @GetMapping("/highscores/scoreUpdate")
-//  public ScoreUpdate getScoreUpdate() {
-//    return new ScoreUpdate(Level.SLIME_WORLD, new HighScore("Jackson", 333));
-//  }
+  @GetMapping("/highscores/scoreUpdate")
+  public ScoreUpdate getScoreUpdate() {
+    return new ScoreUpdate(Level.SLIME_WORLD, new HighScore("Jackson", 333));
+  }
 
   // #HIGH_SCORE_DEMO END
 
