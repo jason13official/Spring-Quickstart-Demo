@@ -234,4 +234,16 @@ public class QuickstartDemoApplication {
 
     return this.detailedStatus;
   }
+
+  // ---
+
+  @ExceptionHandler
+  public void handle(final Throwable t) {
+
+    System.out.println("QuickstartDemo REST controller encountered an error, printing message and stacktrace.");
+    System.out.println();
+    System.out.println(t.getMessage());
+    System.out.println();
+    t.printStackTrace();
+  }
 }
