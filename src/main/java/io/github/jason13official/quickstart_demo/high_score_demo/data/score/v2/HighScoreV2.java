@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import io.github.jason13official.quickstart_demo.high_score_demo.data.score.AbstractHighScore;
 import io.github.jason13official.quickstart_demo.high_score_demo.data.score.v1.HighScore;
+import java.util.Arrays;
 
 /// An evolution on {@link HighScore}, allowing for multiple usernames to be displayed for the high score
 @JsonTypeInfo(use= Id.CLASS, include= As.PROPERTY, property="class")
@@ -22,7 +23,7 @@ public final class HighScoreV2 extends AbstractHighScore {
   }
 
   public String[] getUsernames() {
-    return usernames;
+    return Arrays.copyOf(this.usernames, this.usernames.length); // return a copy instead of the original
   }
 
   public void setUsernames(String[] usernames) {
