@@ -86,16 +86,10 @@ public class QuickstartDemoApplication {
   @PostMapping("/highscores")
   public Map<Level, HighScoreV2> setHighScore(@RequestBody(required = false) ScoreUpdate<AbstractHighScore> scoreUpdate) {
 
-    HighScoreV2 finalized;
-
-    switch (scoreUpdate.highScore) {
-      case HighScore highScore -> {
-        finalized = translateV1V2(highScore);
-      }
-      case HighScoreV2 highScoreV2 -> {
-        finalized = highScoreV2;
-      }
-    }
+    HighScoreV2 finalized  = switch (scoreUpdate.highScore) {
+      case HighScore v1 -> translateV1V2(v1);
+      case HighScoreV2 v2 -> v2;
+    };
 
     HIGH_SCORES.put(scoreUpdate.level, finalized);
     return HIGH_SCORES;
