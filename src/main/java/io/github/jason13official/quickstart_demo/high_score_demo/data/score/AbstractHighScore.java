@@ -5,7 +5,11 @@ import io.github.jason13official.quickstart_demo.high_score_demo.data.score.v2.H
 
 public abstract sealed class AbstractHighScore permits HighScore, HighScoreV2 {
 
-  private final int score;
+  private int score;
+
+  public AbstractHighScore() {
+    this(0);
+  }
 
   public AbstractHighScore(int score) {
     this.score = score;
@@ -13,6 +17,10 @@ public abstract sealed class AbstractHighScore permits HighScore, HighScoreV2 {
 
   public int getScore() {
     return score;
+  }
+
+  public void setScore(int score) {
+    this.score = score;
   }
 
 //  public abstract String getDisplayNames();

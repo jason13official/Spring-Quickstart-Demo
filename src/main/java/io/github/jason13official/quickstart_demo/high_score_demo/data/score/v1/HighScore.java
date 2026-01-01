@@ -15,7 +15,11 @@ import io.github.jason13official.quickstart_demo.high_score_demo.data.score.Abst
 @JsonTypeInfo(use= Id.CLASS, include= As.PROPERTY, property="class")
 public final class HighScore extends AbstractHighScore {
 
-  private final String username;
+  private String username;
+
+  public HighScore() {
+    this("DEFAULT", 0);
+  }
 
   public HighScore(String username, int score) {
     super(score);
@@ -24,6 +28,10 @@ public final class HighScore extends AbstractHighScore {
 
   public String getUsername() {
     return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
 //  @Override
